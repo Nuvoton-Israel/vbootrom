@@ -33,6 +33,10 @@ typedef __builtin_va_list va_list;
 #define FIU0 0xfb000000
 #define CLK_CLKSEL 0x04
 #define CLK_CLKSEL_DEFAULT 0x1f18fc9
+#define CLK_PLLCON0 0x0C
+#define CLK_PLLCON1 0x10
+#define PLL0_DEFAULT 0x80282101
+#define PLL1_DEFAULT 0x80502201
 
 #define FIU_DRD_CFG 0x00
 #define UART0 0xf0000000
@@ -340,6 +344,9 @@ uintptr_t load_boot_image(void)
 
     /* Set FIU to use 4 byte mode, similar to what TIP does in reality. */
     reg_write(FIU0, FIU_DRD_CFG, 0x0301100c);
+    /* Update PLL value as EVB board */
+    reg_write(CLK, CLK_PLLCON0, PLL0_DEFAULT);
+    reg_write(CLK, CLK_PLLCON1, PLL1_DEFAULT);
     uprintf("Boot FW from %x\n", image_addr);
 
     return image_addr;
