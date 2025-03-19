@@ -273,7 +273,7 @@ int32_t load_bmc_image(uintptr_t *dest_addr)
         return -1;
 #define BB_DEST 0xFFFB0000
     len = image_read_u32(SPI0CS0, image.base_addr + BMC_FWLENGTH_OFFSET);
-    copy_boot_image(BB_DEST, SPI0CS0 + image_addr, len, "BB");
+    copy_boot_image(BB_DEST, SPI0CS0 + image_addr, len + BMC_IMAGE_OFFSET, "BB");
     *dest_addr = BB_DEST + BMC_IMAGE_OFFSET;
     if (image_addr == 0)
     {
@@ -292,7 +292,7 @@ int32_t load_bmc_image(uintptr_t *dest_addr)
         return -1;
     img_dest_addr = image_read_u32(SPI0CS0, image.base_addr + BMC_DEST_ADDR_OFFSET);
     len = image_read_u32(SPI0CS0, image.base_addr + BMC_FWLENGTH_OFFSET);
-    copy_boot_image(img_dest_addr, SPI0CS0 + image.base_addr, len, "BL31");
+    copy_boot_image(img_dest_addr, SPI0CS0 + image.base_addr, len + BMC_IMAGE_OFFSET, "BL31");
     // write BL31 address to Scratch Pad Register
     reg_write(GCR_PHYS_BA, SCRPAD, img_dest_addr + BMC_IMAGE_OFFSET);
     reg_write(GCR_PHYS_BA, SCRPAD2, img_dest_addr + BMC_IMAGE_OFFSET);
@@ -304,7 +304,7 @@ int32_t load_bmc_image(uintptr_t *dest_addr)
         return -1;
     img_dest_addr = image_read_u32(SPI0CS0, image.base_addr + BMC_DEST_ADDR_OFFSET);
     len = image_read_u32(SPI0CS0, image.base_addr + BMC_FWLENGTH_OFFSET);
-    copy_boot_image(img_dest_addr, SPI0CS0 + image.base_addr, len, "OPTEE");
+    copy_boot_image(img_dest_addr, SPI0CS0 + image.base_addr, len + BMC_IMAGE_OFFSET, "OPTEE");
 
     // Load U-Boot image
     image.base_addr = image_addr;
@@ -313,7 +313,7 @@ int32_t load_bmc_image(uintptr_t *dest_addr)
         return -1;
     img_dest_addr = image_read_u32(SPI0CS0, image.base_addr + BMC_DEST_ADDR_OFFSET);
     len = image_read_u32(SPI0CS0, image.base_addr + BMC_FWLENGTH_OFFSET);
-    copy_boot_image(img_dest_addr, SPI0CS0 + image.base_addr, len, "U-Boot");
+    copy_boot_image(img_dest_addr, SPI0CS0 + image.base_addr, len + BMC_IMAGE_OFFSET, "U-Boot");
 #ifdef BOOT_UBOOT
     *dest_addr = img_dest_addr + BMC_IMAGE_OFFSET;
 #endif
